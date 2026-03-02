@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Creation Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --cream: #f5f0e8;
+    --warm: #faf7f2;
+    --kdp-accent: #c17d3c;
+    --kdp-light: #fdf3e7;
+    --kdp-border: #e8c99a;
+    --vid-accent: #3a7ca5;
+    --vid-light: #e8f4fc;
+    --vid-border: #9ecae1;
+    --pod-accent: #7c4d8a;
+    --pod-light: #f3eaf7;
+    --pod-border: #c9a8d8;
+    --muted: #888;
+    --line: #e2ddd6;
+    --shadow: 0 2px 12px rgba(26,26,46,0.07);
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 60px 60px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .page-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,0.02) 40px,
+      rgba(255,255,255,0.02) 80px
+    );
+  }
+  .header-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--kdp-accent);
+    margin-bottom: 16px;
+  }
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .page-title span { color: var(--kdp-accent); }
+  .page-subtitle {
+    font-size: 16px;
+    color: rgba(245,240,232,0.65);
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+  .cat-pills { display: flex; gap: 12px; flex-wrap: wrap; }
+  .cat-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .pill-kdp { background: var(--kdp-accent); color: #fff; }
+  .pill-vid { background: var(--vid-accent); color: #fff; }
+  .pill-pod { background: var(--pod-accent); color: #fff; }
+
+  /* ── MAIN LAYOUT ── */
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 32px 100px;
+  }
+
+  /* ── TOC ── */
+  .toc-bar {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 28px;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow);
+  }
+  .toc-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 8px;
+  }
+  .toc-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 5px 12px;
+    border-radius: 6px;
+    transition: background .15s;
+  }
+  .toc-link:hover { background: var(--cream); }
+  .toc-link.kdp { color: var(--kdp-accent); }
+  .toc-link.vid { color: var(--vid-accent); }
+  .toc-link.pod { color: var(--pod-accent); }
+
+  /* ── CATEGORY SECTION ── */
+  .cat-section { margin-bottom: 64px; }
+  .cat-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid;
+  }
+  .cat-header.kdp { border-color: var(--kdp-border); }
+  .cat-header.vid { border-color: var(--vid-border); }
+  .cat-header.pod { border-color: var(--pod-border); }
+
+  .cat-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .kdp .cat-icon { background: var(--kdp-light); }
+  .vid .cat-icon { background: var(--vid-light); }
+  .pod .cat-icon { background: var(--pod-light); }
+
+  .cat-title-wrap {}
+  .cat-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .kdp .cat-num { color: var(--kdp-accent); }
+  .vid .cat-num { color: var(--vid-accent); }
+  .pod .cat-num { color: var(--pod-accent); }
+
+  .cat-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* ── TABS ── */
+  .tabs-container { position: relative; }
+  .tab-nav {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+  }
+  .tab-btn:hover { color: var(--ink); }
+  .tab-btn.active-kdp { color: var(--kdp-accent); border-bottom-color: var(--kdp-accent); }
+  .tab-btn.active-vid { color: var(--vid-accent); border-bottom-color: var(--vid-accent); }
+  .tab-btn.active-pod { color: var(--pod-accent); border-bottom-color: var(--pod-accent); }
+
+  .tab-panel {
+    display: none;
+    background: white;
+    border: 1px solid var(--line);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 28px 28px 32px;
+    box-shadow: var(--shadow);
+  }
+  .tab-panel.active { display: block; }
+
+  /* ── PANEL CONTENT ── */
+  .panel-section { margin-bottom: 28px; }
+  .panel-section:last-child { margin-bottom: 0; }
+  .panel-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  textarea, input[type="text"], input[type="url"] {
+    width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--warm);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+    resize: vertical;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+    line-height: 1.6;
+  }
+  textarea:focus, input:focus {
+    border-color: #aaa;
+    box-shadow: 0 0 0 3px rgba(26,26,46,0.06);
+  }
+  textarea { min-height: 90px; }
+  .input-row { display: flex; gap: 10px; margin-bottom: 10px; }
+  .input-row input { flex: 1; }
+
+  /* ── TABLE ── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .data-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--line);
+    background: var(--warm);
+  }
+  .data-table td {
+    padding: 0;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+  }
+  .data-table td input, .data-table td textarea {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    padding: 10px 12px;
+    min-height: unset;
+    resize: none;
+    font-size: 13px;
+  }
+  .data-table td input:focus, .data-table td textarea:focus {
+    background: var(--warm);
+    box-shadow: none;
+    border-radius: 4px;
+  }
+  .data-table tr:hover td { background: rgba(245,240,232,0.5); }
+
+  .add-row-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    background: transparent;
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+    text-align: center;
+    transition: all .15s;
+  }
+  .add-row-btn:hover { border-color: #aaa; color: var(--ink); background: var(--cream); }
+
+  /* ── UPLOAD ZONE ── */
+  .upload-zone {
+    border: 2px dashed var(--line);
+    border-radius: 10px;
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+    background: var(--warm);
+    position: relative;
+  }
+  .upload-zone:hover { border-color: #aaa; background: var(--cream); }
+  .upload-zone input[type="file"] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .upload-icon { font-size: 28px; margin-bottom: 10px; }
+  .upload-text { font-size: 13px; color: var(--muted); }
+  .upload-text strong { color: var(--ink); font-weight: 600; }
+  .upload-preview {
+    display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px;
+  }
+  .preview-item {
+    width: 80px; height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    position: relative;
+    background: #eee;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: var(--muted);
+    text-align: center;
+  }
+  .preview-item img { width: 100%; height: 100%; object-fit: cover; }
+  .preview-remove {
+    position: absolute; top: 3px; right: 3px;
+    background: rgba(0,0,0,0.5); color: #fff;
+    border: none; border-radius: 50%;
+    width: 18px; height: 18px;
+    cursor: pointer; font-size: 11px;
+    display: none; align-items: center; justify-content: center;
+  }
+  .preview-item:hover .preview-remove { display: flex; }
+
+  /* ── LINK MANAGER ── */
+  .link-list { list-style: none; }
+  .link-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .link-item:last-child { border-bottom: none; }
+  .link-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+  .link-href { flex: 1; color: var(--vid-accent); text-decoration: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .link-remove { background: none; border: none; color: #ccc; cursor: pointer; font-size: 16px; line-height: 1; }
+  .link-remove:hover { color: #e74c3c; }
+
+  /* ── SPREADSHEET EMBED ── */
+  .embed-box {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .embed-toolbar {
+    background: var(--warm);
+    padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .embed-toolbar input { flex: 1; font-size: 13px; background: white; }
+  .embed-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 1px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: white;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .15s;
+  }
+  .embed-btn:hover { background: var(--ink); color: white; border-color: var(--ink); }
+  .embed-frame-wrapper {
+    min-height: 300px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 13px;
+    background: var(--cream);
+  }
+  .embed-frame-wrapper iframe { width: 100%; border: none; }
+
+  /* ── KANBAN / IDEA CARDS ── */
+  .idea-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .idea-card {
+    background: var(--warm);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 14px 12px;
+    position: relative;
+    cursor: default;
+  }
+  .idea-card textarea {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 13px;
+    min-height: 70px;
+    resize: none;
+  }
+  .idea-card textarea:focus { box-shadow: none; }
+  .idea-card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 10px;
+  }
+  .idea-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 1px;
+    padding: 3px 8px; border-radius: 12px;
+    background: var(--cream);
+    color: var(--muted);
+    border: 1px solid var(--line);
+  }
+  .idea-status {
+    font-size: 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .add-idea-btn {
+    grid-column: 1 / -1;
+    border: 2px dashed var(--line);
+    border-radius: 10px;
+    padding: 14px;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 1px;
+    cursor: pointer;
+    transition: all .15s;
+    text-align: center;
+  }
+  .add-idea-btn:hover { border-color: #aaa; color: var(--ink); background: var(--cream); }
+
+  /* ── PROGRESS BAR ── */
+  .progress-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 8px;
+  }
+  .progress-name { font-size: 13px; min-width: 100px; }
+  .progress-track {
+    flex: 1; height: 8px;
+    background: var(--line); border-radius: 4px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; border-radius: 4px;
+    background: var(--kdp-accent);
+    transition: width .3s;
+  }
+  .progress-fill.vid { background: var(--vid-accent); }
+  .progress-fill.pod { background: var(--pod-accent); }
+  .progress-pct { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); min-width: 36px; text-align: right; }
+
+  /* ── STATUS BADGE ── */
+  .status-select {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 1px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 8px;
+    background: var(--warm);
+    color: var(--ink);
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* ── COLOR DIVIDER ── */
+  .divider {
+    height: 1px; background: var(--line); margin: 40px 0;
+  }
+
+  /* ── NOTES AREA ── */
+  .notes-area {
+    border-left: 3px solid var(--line);
+    padding-left: 16px;
+    margin-top: 6px;
+  }
+  .notes-area textarea { background: transparent; border: none; font-size: 14px; line-height: 1.7; min-height: 120px; color: var(--ink); }
+  .notes-area textarea:focus { box-shadow: none; }
+
+  /* ── FOOTER ── */
+  .page-footer {
+    text-align: center;
+    padding: 32px;
+    border-top: 1px solid var(--line);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 640px) {
+    .page-header { padding: 36px 20px 32px; }
+    .main { padding: 28px 16px 60px; }
+    .tab-panel { padding: 18px 16px; }
+  }
+
+  /* Scroll animation */
+  .fade-in {
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp .5s ease forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: none; }
+  }
+  .cat-section:nth-child(1) { animation-delay: .1s; }
+  .cat-section:nth-child(2) { animation-delay: .2s; }
+  .cat-section:nth-child(3) { animation-delay: .3s; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════ HEADER ══════════════════════════════════ -->
+<header class="page-header">
+  <div class="header-badge">✦ Premium Template · Content Studio</div>
+  <h1 class="page-title">Content Creation<br><span>Planner</span></h1>
+  <p class="page-subtitle">Your all-in-one workspace for KDP Storybook eBooks, Video Production, and Print-on-Demand — from idea to launch.</p>
+  <div class="cat-pills">
+    <span class="cat-pill pill-kdp">📚 KDP Storyboard</span>
+    <span class="cat-pill pill-vid">🎥 Video Creation</span>
+    <span class="cat-pill pill-pod">👕 Print on Demand</span>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════ MAIN ══════════════════════════════════ -->
+<main class="main">
+
+  <!-- TOC -->
+  <nav class="toc-bar">
+    <span class="toc-label">Jump to</span>
+    <a href="#kdp" class="toc-link kdp">📚 KDP Storyboard</a>
+    <a href="#video" class="toc-link vid">🎥 Video Creation</a>
+    <a href="#pod" class="toc-link pod">👕 Print on Demand</a>
+  </nav>
+
+  <!-- ─────────────────────────────── KDP ─────────────────────────────── -->
+  <section id="kdp" class="cat-section fade-in">
+    <div class="cat-header kdp">
+      <div class="cat-icon">📚</div>
+      <div class="cat-title-wrap">
+        <div class="cat-num">Category 01</div>
+        <div class="cat-name">KDP Storyboard eBook Creation</div>
+      </div>
+    </div>
+
+    <!-- Tab nav -->
+    <div class="tabs-container">
+      <div class="tab-nav" id="kdp-tabs">
+        <button class="tab-btn active-kdp" onclick="switchTab('kdp','ideas',this)">💡 Ideas</button>
+        <button class="tab-btn" onclick="switchTab('kdp','storyboard',this)">🗂 Storyboard</button>
+        <button class="tab-btn" onclick="switchTab('kdp','characters',this)">🧑‍🎨 Characters</button>
+        <button class="tab-btn" onclick="switchTab('kdp','chapters',this)">📖 Chapters</button>
+        <button class="tab-btn" onclick="switchTab('kdp','transcript',this)">📝 Transcript</button>
+        <button class="tab-btn" onclick="switchTab('kdp','assets',this)">🖼 Assets & Links</button>
+      </div>
+
+      <!-- IDEAS -->
+      <div id="kdp-ideas" class="tab-panel active">
+        <div class="panel-section">
+          <div class="panel-label">Book Title & Concept</div>
+          <input type="text" placeholder="Working title…">
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Genre / Niche</div>
+          <div class="input-row">
+            <input type="text" placeholder="e.g. Children's Adventure, Self-Help, Fantasy…">
+            <select class="status-select">
+              <option>💡 Idea</option><option>🔥 In Progress</option><option>✅ Published</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Idea Cards</div>
+          <div class="idea-grid" id="kdp-idea-grid">
+            <div class="idea-card">
+              <textarea placeholder="Write your idea here…"></textarea>
+              <div class="idea-card-footer"><span class="idea-tag">BRAINSTORM</span><span class="idea-status" onclick="cycleStatus(this)">⭐</span></div>
+            </div>
+            <div class="idea-card">
+              <textarea placeholder="Market research note…"></textarea>
+              <div class="idea-card-footer"><span class="idea-tag">RESEARCH</span><span class="idea-status" onclick="cycleStatus(this)">🔲</span></div>
+            </div>
+            <button class="add-idea-btn" onclick="addIdeaCard('kdp-idea-grid','kdp')">+ Add Idea Card</button>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Target Audience & Keywords</div>
+          <textarea placeholder="Age group, interests, Amazon keywords…"></textarea>
+        </div>
+      </div>
+
+      <!-- STORYBOARD -->
+      <div id="kdp-storyboard" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Story Synopsis</div>
+          <textarea style="min-height:120px;" placeholder="Write a short synopsis of the story…"></textarea>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Scene Breakdown Table</div>
+          <table class="data-table">
+            <thead><tr>
+              <th style="width:50px">#</th>
+              <th>Scene Title</th>
+              <th>Setting</th>
+              <th>Action / Events</th>
+              <th>Notes</th>
+              <th style="width:100px">Status</th>
+            </tr></thead>
+            <tbody id="kdp-scenes">
+              <tr>
+                <td><input type="text" value="1"></td>
+                <td><input type="text" placeholder="Opening scene…"></td>
+                <td><input type="text" placeholder="Location…"></td>
+                <td><textarea style="min-height:36px;height:36px;" placeholder="What happens…"></textarea></td>
+                <td><input type="text" placeholder="Notes…"></td>
+                <td><select class="status-select"><option>📝 Draft</option><option>✏️ Writing</option><option>✅ Done</option></select></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="add-row-btn" onclick="addTableRow('kdp-scenes',6)">+ Add Scene</button>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Storyboard Images</div>
+          <div class="upload-zone" onclick="triggerUpload('kdp-sb-upload')">
+            <input type="file" id="kdp-sb-upload" accept="image/*" multiple onchange="previewImages(event,'kdp-sb-preview')">
+            <div class="upload-icon">🖼</div>
+            <div class="upload-text"><strong>Click to upload</strong> storyboard frames<br>PNG, JPG, GIF supported</div>
+          </div>
+          <div class="upload-preview" id="kdp-sb-preview"></div>
+        </div>
+      </div>
+
+      <!-- CHARACTERS -->
+      <div id="kdp-characters" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Character Roster</div>
+          <table class="data-table">
+            <thead><tr>
+              <th>Name</th><th>Role</th><th>Age / Species</th><th>Personality</th><th>Arc / Goal</th>
+            </tr></thead>
+            <tbody id="kdp-chars">
+              <tr>
+                <td><input type="text" placeholder="Character name…"></td>
+                <td><input type="text" placeholder="Protagonist / Mentor…"></td>
+                <td><input type="text" placeholder="Age…"></td>
+                <td><textarea style="height:36px;min-height:36px;" placeholder="Traits…"></textarea></td>
+                <td><textarea style="height:36px;min-height:36px;" placeholder="Goal…"></textarea></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="add-row-btn" onclick="addTableRow('kdp-chars',5)">+ Add Character</button>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Character Reference Images</div>
+          <div class="upload-zone" onclick="triggerUpload('kdp-char-upload')">
+            <input type="file" id="kdp-char-upload" accept="image/*" multiple onchange="previewImages(event,'kdp-char-preview')">
+            <div class="upload-icon">🧑‍🎨</div>
+            <div class="upload-text"><strong>Upload</strong> character sketches or AI-generated references</div>
+          </div>
+          <div class="upload-preview" id="kdp-char-preview"></div>
+        </div>
+      </div>
+
+      <!-- CHAPTERS -->
+      <div id="kdp-chapters" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Chapter Outline</div>
+          <table class="data-table">
+            <thead><tr>
+              <th style="width:60px">Ch.</th><th>Title</th><th>Summary</th><th>Word Count Goal</th><th>Status</th>
+            </tr></thead>
+            <tbody id="kdp-chaps">
+              <tr>
+                <td><input type="text" value="1"></td>
+                <td><input type="text" placeholder="Chapter title…"></td>
+                <td><textarea style="height:36px;min-height:36px;" placeholder="What happens…"></textarea></td>
+                <td><input type="text" placeholder="500 words"></td>
+                <td><select class="status-select"><option>📝 Draft</option><option>✏️ Writing</option><option>🔍 Editing</option><option>✅ Done</option></select></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="add-row-btn" onclick="addTableRow('kdp-chaps',5)">+ Add Chapter</button>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Writing Progress</div>
+          <div id="kdp-progress">
+            <div class="progress-row"><span class="progress-name">Chapter 1</span><div class="progress-track"><div class="progress-fill" style="width:80%"></div></div><span class="progress-pct">80%</span></div>
+            <div class="progress-row"><span class="progress-name">Chapter 2</span><div class="progress-track"><div class="progress-fill" style="width:40%"></div></div><span class="progress-pct">40%</span></div>
+            <div class="progress-row"><span class="progress-name">Chapter 3</span><div class="progress-track"><div class="progress-fill" style="width:10%"></div></div><span class="progress-pct">10%</span></div>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Spreadsheet / Outline (embed link)</div>
+          <div class="embed-box">
+            <div class="embed-toolbar">
+              <input type="url" id="kdp-sheet-url" placeholder="Paste Google Sheets share link…">
+              <button class="embed-btn" onclick="embedSheet('kdp-sheet-url','kdp-sheet-frame')">Embed</button>
+            </div>
+            <div class="embed-frame-wrapper" id="kdp-sheet-frame">Paste a public Google Sheets or Airtable URL above and click Embed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRANSCRIPT -->
+      <div id="kdp-transcript" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Full Manuscript / Transcript</div>
+          <div class="notes-area">
+            <textarea style="min-height:320px;" placeholder="Write or paste your full eBook text here. Use headings, scene breaks, and dialogue freely…"></textarea>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Editing Notes</div>
+          <textarea placeholder="Notes for revisions, beta reader feedback, editor comments…"></textarea>
+        </div>
+      </div>
+
+      <!-- ASSETS & LINKS -->
+      <div id="kdp-assets" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Upload Images / Cover Art</div>
+          <div class="upload-zone" onclick="triggerUpload('kdp-asset-upload')">
+            <input type="file" id="kdp-asset-upload" accept="image/*,application/pdf" multiple onchange="previewImages(event,'kdp-asset-preview')">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text"><strong>Upload</strong> covers, interior art, or PDF drafts</div>
+          </div>
+          <div class="upload-preview" id="kdp-asset-preview"></div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Resource Links</div>
+          <div class="input-row">
+            <input type="url" id="kdp-link-input" placeholder="Paste link (Canva, KDP dashboard, reference…)">
+            <button class="embed-btn" onclick="addLink('kdp-link-input','kdp-link-label','kdp-links')">Add</button>
+            <input type="text" id="kdp-link-label" placeholder="Label" style="max-width:120px;">
+          </div>
+          <ul class="link-list" id="kdp-links"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─────────────────────────────── VIDEO ─────────────────────────────── -->
+  <section id="video" class="cat-section fade-in">
+    <div class="cat-header vid">
+      <div class="cat-icon">🎥</div>
+      <div class="cat-title-wrap">
+        <div class="cat-num">Category 02</div>
+        <div class="cat-name">Video Creation</div>
+      </div>
+    </div>
+
+    <div class="tabs-container">
+      <div class="tab-nav" id="vid-tabs">
+        <button class="tab-btn active-vid" onclick="switchTab('vid','ideas',this)">💡 Ideas</button>
+        <button class="tab-btn" onclick="switchTab('vid','storyboard',this)">🎬 Storyboard</button>
+        <button class="tab-btn" onclick="switchTab('vid','characters',this)">🎭 Characters/Hosts</button>
+        <button class="tab-btn" onclick="switchTab('vid','chapters',this)">📋 Segments</button>
+        <button class="tab-btn" onclick="switchTab('vid','transcript',this)">🎙 Script/Transcript</button>
+        <button class="tab-btn" onclick="switchTab('vid','assets',this)">🖼 Assets & Links</button>
+      </div>
+
+      <!-- VIDEO IDEAS -->
+      <div id="vid-ideas" class="tab-panel active">
+        <div class="panel-section">
+          <div class="panel-label">Video Title & Hook</div>
+          <input type="text" placeholder="Video title / working title…">
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Platform & Format</div>
+          <div class="input-row">
+            <input type="text" placeholder="YouTube / TikTok / Reels / Course…">
+            <input type="text" placeholder="Duration (e.g. 10-15 min)">
+            <select class="status-select">
+              <option>💡 Idea</option><option>🎬 Filming</option><option>✂️ Editing</option><option>🚀 Live</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Idea Cards</div>
+          <div class="idea-grid" id="vid-idea-grid">
+            <div class="idea-card">
+              <textarea placeholder="Video topic idea…"></textarea>
+              <div class="idea-card-footer"><span class="idea-tag">TOPIC</span><span class="idea-status" onclick="cycleStatus(this)">⭐</span></div>
+            </div>
+            <div class="idea-card">
+              <textarea placeholder="Hook / thumbnail idea…"></textarea>
+              <div class="idea-card-footer"><span class="idea-tag">HOOK</span><span class="idea-status" onclick="cycleStatus(this)">🔲</span></div>
+            </div>
+            <button class="add-idea-btn" onclick="addIdeaCard('vid-idea-grid','vid')">+ Add Idea Card</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIDEO STORYBOARD -->
+      <div id="vid-storyboard" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Video Synopsis / Premise</div>
+          <textarea style="min-height:100px;" placeholder="What is this video about? What problem does it solve?"></textarea>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Shot / Scene List</div>
+          <table class="data-table">
+            <thead><tr>
+              <th style="width:40px">#</th><th>Shot Type</th><th>Location / Set</th><th>Description</th><th>B-Roll Notes</th><th style="width:90px">Status</th>
+            </tr></thead>
+            <tbody id="vid-scenes">
+              <tr>
+                <td><input type="text" value="1"></td>
+                <td><input type="text" placeholder="Wide / Close / Over shoulder…"></td>
+                <td><input type="text" placeholder="Desk / Outdoor…"></td>
+                <td><textarea style="height:36px;min-height:36px;" placeholder="What's happening…"></textarea></td>
+                <td><textarea style="height:36px;min-height:36px;" placeholder="B-roll ideas…"></textarea></td>
+                <td><select class="status-select"><option>📝 Plan</option><option>🎬 Film</option><option>✅ Done</option></select></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="add-row-btn" onclick="addTableRow('vid-scenes',6)">+ Add Shot</button>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Storyboard Frame Uploads</div>
+          <div class="upload-zone" onclick="triggerUpload('vid-sb-upload')">
+            <input type="file" id="vid-sb-upload" accept="image/*" multiple onchange="previewImages(event,'vid-sb-preview')">
+            <div class="upload-icon">🎞</div>
+            <div class="upload-text"><strong>Upload</strong> storyboard sketches or reference screenshots</div>
+          </div>
+          <div class="upload-preview" id="vid-sb-preview"></div>
+        </div>
+      </div>
+
+      <!-- VIDEO CHARACTERS/HOSTS -->
+      <div id="vid-characters" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Cast & Characters</div>
+          <table class="data-table">
+            <thead><tr>
+              <th>Name</th><th>Role (Host/Guest/Character)</th><th>Contact / Notes</th><th>On-Screen Style</th>
+            </tr></thead>
+            <tbody id="vid-chars">
+              <tr>
+                <td><input type="text" placeholder="Name…"></td>
+                <td><input type="text" placeholder="Host / Voice-over…"></td>
+                <td><input type="text" placeholder="Email or notes…"></td>
+                <td><textarea style="height:36px;min-height:36px;" placeholder="Wardrobe, persona…"></textarea></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="add-row-btn" onclick="addTableRow('vid-chars',4)">+ Add Person</button>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Reference Images</div>
+          <div class="upload-zone" onclick="triggerUpload('vid-char-upload')">
+            <input type="file" id="vid-char-upload" accept="image/*" multiple onchange="previewImages(event,'vid-char-preview')">
+            <div class="upload-icon">🎭</div>
+            <div class="upload-text"><strong>Upload</strong> headshots, mood board references</div>
+          </div>
+          <div class="upload-preview" id="vid-char-preview"></div>
+        </div>
+      </div>
+
+      <!-- VIDEO SEGMENTS/CHAPTERS -->
+      <div id="vid-chapters" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Segment / Chapter Breakdown</div>
+          <table class="data-table">
+            <thead><tr>
+              <th style="width:40px">#</th><th>Segment Title</th><th>Timestamp</th><th>Key Points</th><th>Status</th>
+            </tr></thead>
+            <tbody id="vid-chaps">
+              <tr>
+                <td><input type="text" value="1"></td>
+                <td><input type="text" placeholder="Intro / Hook…"></td>
+                <td><input type="text" placeholder="0:00 – 0:45"></td>
+                <td><textarea style="height:36px;min-height:36px;" placeholder="Talking points…"></textarea></td>
+                <td><select class="status-select"><option>📝 Draft</option><option>🎬 Film</option><option>✅ Done</option></select></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="add-row-btn" onclick="addTableRow('vid-chaps',5)">+ Add Segment</button>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Production Spreadsheet (embed link)</div>
+          <div class="embed-box">
+            <div class="embed-toolbar">
+              <input type="url" id="vid-sheet-url" placeholder="Paste Google Sheets production tracker link…">
+              <button class="embed-btn" onclick="embedSheet('vid-sheet-url','vid-sheet-frame')">Embed</button>
+            </div>
+            <div class="embed-frame-wrapper" id="vid-sheet-frame">Paste a public Google Sheets URL and click Embed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIDEO TRANSCRIPT -->
+      <div id="vid-transcript" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Full Script / Transcript</div>
+          <div class="notes-area">
+            <textarea style="min-height:320px;" placeholder="Write your full video script here. Use [PAUSE], [CUT], [B-ROLL] markers as needed…"></textarea>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">SEO – Tags, Description & Chapters</div>
+          <textarea placeholder="YouTube description, hashtags, chapter timestamps for the description…"></textarea>
+        </div>
+      </div>
+
+      <!-- VIDEO ASSETS -->
+      <div id="vid-assets" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Upload Thumbnails / Graphics / B-Roll Stills</div>
+          <div class="upload-zone" onclick="triggerUpload('vid-asset-upload')">
+            <input type="file" id="vid-asset-upload" accept="image/*,video/*" multiple onchange="previewImages(event,'vid-asset-preview')">
+            <div class="upload-icon">🖼</div>
+            <div class="upload-text"><strong>Upload</strong> thumbnails, lower-thirds, overlays</div>
+          </div>
+          <div class="upload-preview" id="vid-asset-preview"></div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Resource Links</div>
+          <div class="input-row">
+            <input type="url" id="vid-link-input" placeholder="Paste link (YouTube Studio, Canva, Drive…)">
+            <button class="embed-btn" onclick="addLink('vid-link-input','vid-link-label','vid-links')">Add</button>
+            <input type="text" id="vid-link-label" placeholder="Label" style="max-width:120px;">
+          </div>
+          <ul class="link-list" id="vid-links"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ─────────────────────────────── POD ─────────────────────────────── -->
+  <section id="pod" class="cat-section fade-in">
+    <div class="cat-header pod">
+      <div class="cat-icon">👕</div>
+      <div class="cat-title-wrap">
+        <div class="cat-num">Category 03</div>
+        <div class="cat-name">Print on Demand – T-Shirt</div>
+      </div>
+    </div>
+
+    <div class="tabs-container">
+      <div class="tab-nav" id="pod-tabs">
+        <button class="tab-btn active-pod" onclick="switchTab('pod','brainstorm',this)">🧠 Brainstorm Ideas</button>
+        <button class="tab-btn" onclick="switchTab('pod','mockup',this)">🎨 Mockup Designs</button>
+        <button class="tab-btn" onclick="switchTab('pod','topics',this)">📌 Topics & Niches</button>
+        <button class="tab-btn" onclick="switchTab('pod','assets',this)">🖼 Assets & Links</button>
+      </div>
+
+      <!-- BRAINSTORM -->
+      <div id="pod-brainstorm" class="tab-panel active">
+        <div class="panel-section">
+          <div class="panel-label">Campaign / Collection Name</div>
+          <input type="text" placeholder="e.g. 'Funny Cat Lover Series'…">
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Brainstorm Cards</div>
+          <div class="idea-grid" id="pod-idea-grid">
+            <div class="idea-card">
+              <textarea placeholder="Quote or phrase idea…"></textarea>
+              <div class="idea-card-footer"><span class="idea-tag">QUOTE</span><span class="idea-status" onclick="cycleStatus(this)">⭐</span></div>
+            </div>
+            <div class="idea-card">
+              <textarea placeholder="Design concept or style…"></textarea>
+              <div class="idea-card-footer"><span class="idea-tag">DESIGN</span><span class="idea-status" onclick="cycleStatus(this)">🔲</span></div>
+            </div>
+            <div class="idea-card">
+              <textarea placeholder="Color palette or vibe…"></textarea>
+              <div class="idea-card-footer"><span class="idea-tag">COLOR</span><span class="idea-status" onclick="cycleStatus(this)">🔲</span></div>
+            </div>
+            <button class="add-idea-btn" onclick="addIdeaCard('pod-idea-grid','pod')">+ Add Brainstorm Card</button>
+          </div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Competitor Research Notes</div>
+          <textarea placeholder="Notes on bestsellers, pricing, Merch by Amazon, Printify, etc.…"></textarea>
+        </div>
+      </div>
+
+      <!-- MOCKUP DESIGNS -->
+      <div id="pod-mockup" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Design Table</div>
+          <table class="data-table">
+            <thead><tr>
+              <th>Design Name</th><th>SKU / ID</th><th>Colors Available</th><th>Sizes</th><th>Platform</th><th>Status</th>
+            </tr></thead>
+            <tbody id="pod-designs">
+              <tr>
+                <td><input type="text" placeholder="Design name…"></td>
+                <td><input type="text" placeholder="SKU-001"></td>
+                <td><input type="text" placeholder="Black, White, Navy…"></td>
+                <td><input type="text" placeholder="S M L XL XXL"></td>
+                <td><input type="text" placeholder="Printify / MBA…"></td>
+                <td><select class="status-select"><option>💡 Idea</option><option>🎨 Designing</option><option>🚀 Live</option><option>⏸ Paused</option></select></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="add-row-btn" onclick="addTableRow('pod-designs',6)">+ Add Design</button>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Mockup Image Uploads</div>
+          <div class="upload-zone" onclick="triggerUpload('pod-mockup-upload')">
+            <input type="file" id="pod-mockup-upload" accept="image/*" multiple onchange="previewImages(event,'pod-mockup-preview')">
+            <div class="upload-icon">🎨</div>
+            <div class="upload-text"><strong>Upload</strong> mockup images, design files, PNG exports</div>
+          </div>
+          <div class="upload-preview" id="pod-mockup-preview"></div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Design Spreadsheet (embed link)</div>
+          <div class="embed-box">
+            <div class="embed-toolbar">
+              <input type="url" id="pod-sheet-url" placeholder="Paste Google Sheets inventory / tracker link…">
+              <button class="embed-btn" onclick="embedSheet('pod-sheet-url','pod-sheet-frame')">Embed</button>
+            </div>
+            <div class="embed-frame-wrapper" id="pod-sheet-frame">Paste a public Google Sheets URL and click Embed</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOPICS & NICHES -->
+      <div id="pod-topics" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Niche Research Table</div>
+          <table class="data-table">
+            <thead><tr>
+              <th>Niche / Topic</th><th>Est. Demand</th><th>Competition</th><th>Keywords</th><th>Priority</th>
+            </tr></thead>
+            <tbody id="pod-niches">
+              <tr>
+                <td><input type="text" placeholder="e.g. Dog Moms…"></td>
+                <td><select class="status-select"><option>🔥 High</option><option>📈 Medium</option><option>😴 Low</option></select></td>
+                <td><select class="status-select"><option>💪 Low</option><option>⚖️ Medium</option><option>🔴 High</option></select></td>
+                <td><input type="text" placeholder="dog mom gift, dog lover shirt…"></td>
+                <td><select class="status-select"><option>⭐ P1</option><option>P2</option><option>P3</option></select></td>
+              </tr>
+            </tbody>
+          </table>
+          <button class="add-row-btn" onclick="addTableRow('pod-niches',5)">+ Add Niche</button>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Seasonal / Trending Topics</div>
+          <textarea placeholder="Holidays, trends, viral moments to design for…"></textarea>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Listing Copy & Tags</div>
+          <textarea style="min-height:120px;" placeholder="Title formulas, bullet points, Amazon/Etsy SEO tags…"></textarea>
+        </div>
+      </div>
+
+      <!-- POD ASSETS -->
+      <div id="pod-assets" class="tab-panel">
+        <div class="panel-section">
+          <div class="panel-label">Upload Design Files / Artwork</div>
+          <div class="upload-zone" onclick="triggerUpload('pod-asset-upload')">
+            <input type="file" id="pod-asset-upload" accept="image/*,application/pdf,.ai,.svg,.png" multiple onchange="previewImages(event,'pod-asset-preview')">
+            <div class="upload-icon">🗂</div>
+            <div class="upload-text"><strong>Upload</strong> SVG, PNG, AI, PDF design files and mockups</div>
+          </div>
+          <div class="upload-preview" id="pod-asset-preview"></div>
+        </div>
+        <div class="panel-section">
+          <div class="panel-label">Resource Links</div>
+          <div class="input-row">
+            <input type="url" id="pod-link-input" placeholder="Paste link (Printify, Canva, Merch by Amazon…)">
+            <button class="embed-btn" onclick="addLink('pod-link-input','pod-link-label','pod-links')">Add</button>
+            <input type="text" id="pod-link-label" placeholder="Label" style="max-width:120px;">
+          </div>
+          <ul class="link-list" id="pod-links"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="page-footer">✦ Content Creation Planner · Premium Template · All-in-One Workspace ✦</footer>
+
+<script>
+// ── TAB SWITCHING ──
+function switchTab(cat, tab, btn) {
+  const panels = document.querySelectorAll(`[id^="${cat}-"]`);
+  panels.forEach(p => { if(p.classList.contains('tab-panel')) p.classList.remove('active'); });
+  const target = document.getElementById(`${cat}-${tab}`);
+  if(target) target.classList.add('active');
+
+  const navId = cat === 'pod' ? 'pod-tabs' : (cat === 'kdp' ? 'kdp-tabs' : 'vid-tabs');
+  document.getElementById(navId).querySelectorAll('.tab-btn').forEach(b => {
+    b.className = 'tab-btn';
+  });
+  btn.classList.add(`active-${cat}`);
+}
+
+// ── ADD TABLE ROW ──
+function addTableRow(tbodyId, cols) {
+  const tb = document.getElementById(tbodyId);
+  const tr = document.createElement('tr');
+  const rowNum = tb.rows.length + 1;
+  for(let i = 0; i < cols; i++) {
+    const td = document.createElement('td');
+    if(i === 0) {
+      td.innerHTML = `<input type="text" value="${rowNum}">`;
+    } else if(i === cols - 1) {
+      td.innerHTML = `<select class="status-select"><option>📝 Draft</option><option>✏️ WIP</option><option>✅ Done</option></select>`;
+    } else if(i === cols - 2 && cols > 3) {
+      td.innerHTML = `<textarea style="height:36px;min-height:36px;" placeholder="Notes…"></textarea>`;
+    } else {
+      td.innerHTML = `<input type="text" placeholder="—">`;
+    }
+    tr.appendChild(td);
+  }
+  tb.appendChild(tr);
+}
+
+// ── IDEA CARDS ──
+function addIdeaCard(gridId, cat) {
+  const grid = document.getElementById(gridId);
+  const btn = grid.querySelector('.add-idea-btn');
+  const card = document.createElement('div');
+  card.className = 'idea-card';
+  card.innerHTML = `
+    <textarea placeholder="New idea…"></textarea>
+    <div class="idea-card-footer">
+      <span class="idea-tag">IDEA</span>
+      <span class="idea-status" onclick="cycleStatus(this)">🔲</span>
+    </div>`;
+  grid.insertBefore(card, btn);
+}
+
+const statuses = ['🔲','⭐','✅','🔥','❌'];
+function cycleStatus(el) {
+  const i = statuses.indexOf(el.textContent);
+  el.textContent = statuses[(i+1) % statuses.length];
+}
+
+// ── IMAGE PREVIEW ──
+function triggerUpload(id) {
+  document.getElementById(id).click();
+}
+function previewImages(event, previewId) {
+  const preview = document.getElementById(previewId);
+  const files = Array.from(event.target.files);
+  files.forEach(file => {
+    const item = document.createElement('div');
+    item.className = 'preview-item';
+    if(file.type.startsWith('image/')) {
+      const img = document.createElement('img');
+      const reader = new FileReader();
+      reader.onload = e => { img.src = e.target.result; };
+      reader.readAsDataURL(file);
+      item.appendChild(img);
+    } else {
+      item.textContent = file.name.slice(0,12) + (file.name.length > 12 ? '…' : '');
+    }
+    const rmBtn = document.createElement('button');
+    rmBtn.className = 'preview-remove';
+    rmBtn.textContent = '×';
+    rmBtn.onclick = (e) => { e.stopPropagation(); item.remove(); };
+    item.appendChild(rmBtn);
+    preview.appendChild(item);
+  });
+}
+
+// ── EMBED SHEET ──
+function embedSheet(inputId, frameId) {
+  let url = document.getElementById(inputId).value.trim();
+  const wrapper = document.getElementById(frameId);
+  if(!url) { wrapper.textContent = 'Please enter a valid URL.'; return; }
+  // Convert Google Sheets URL to embed format
+  if(url.includes('docs.google.com/spreadsheets')) {
+    url = url.replace('/edit', '/htmlview').replace('/pub?', '/pub?widget=true&');
+    if(!url.includes('htmlview') && !url.includes('/pub')) {
+      url = url.split('?')[0] + '/htmlview';
+    }
+  }
+  wrapper.innerHTML = `<iframe src="${url}" width="100%" height="400" frameborder="0"></iframe>`;
+}
+
+// ── LINKS ──
+function addLink(inputId, labelId, listId) {
+  const url = document.getElementById(inputId).value.trim();
+  const label = document.getElementById(labelId).value.trim() || url;
+  if(!url) return;
+  const list = document.getElementById(listId);
+  const li = document.createElement('li');
+  li.className = 'link-item';
+  li.innerHTML = `
+    <span class="link-dot"></span>
+    <a href="${url}" class="link-href" target="_blank" rel="noopener">${label}</a>
+    <button class="link-remove" onclick="this.parentElement.remove()">×</button>`;
+  list.appendChild(li);
+  document.getElementById(inputId).value = '';
+  document.getElementById(labelId).value = '';
+}
+</script>
+</body>
+</html>
